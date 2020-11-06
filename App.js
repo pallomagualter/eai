@@ -1,3 +1,4 @@
+// @refresh reset
 import React, { useState, useEffect, useCallback } from 'react';
 import { GiftedChat } from 'react-native-gifted-chat';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -42,7 +43,8 @@ export default function App() {
           .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
       appendMessages(messagesFirestore)                             
     })
-  }, []);
+    return () => unsubscribe()
+  }, [])
 
   const appendMessages = useCallback(
     (messages) => {
