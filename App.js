@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { GiftedChat } from 'react-native-gifted-chat';
 import AsyncStorage from '@react-native-community/async-storage';
 import { StyleSheet, Text, TextInput, View, YellowBox, Button } from 'react-native';
@@ -40,10 +40,14 @@ export default function App() {
             return { ... message, createdAt: message.createdAt.toDate() } 
           })//utilizer o sort para ordenar as mensagem após ter anexado o date a elas 
           .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-      setMessages(messagesFirestore) 
-                                    
+      appendMessages(messagesFirestore)                             
     })
   }, []);
+
+  const appendMessages = useCallback(
+    (messages) => {
+      setMessages((previousMessages) => GiftedChat.append(previousMessages, messages))
+    }, [messages]) 
 
   async function readUser() {
     const user = await AsyncStorage.getItem('user')
