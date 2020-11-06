@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { GiftedChat } from 'react-native-gifted-chat';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -60,6 +59,11 @@ export default function App() {
       setUser(user)
     }
 
+    async function handleSend(messages) {
+      const writes = messages.map(m => chatsRef.add(m))
+      await Promise.all(writes)
+    }
+
 
     if(!user) {
       return(
@@ -78,7 +82,7 @@ export default function App() {
       )
     }
 
-    return <GiftedChat messages={messages} user={user} onSend={} />
+    return <GiftedChat messages={messages} user={user} onSend={handleSend} />
 }
 
 const styles = StyleSheet.create({
